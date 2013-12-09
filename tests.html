@@ -1,0 +1,67 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>JSON 测试用例</title>
+<link rel="stylesheet" href="http://code.jquery.com/qunit/qunit-1.12.0.css">
+<script src="json.js"></script>
+<script src="http://code.jquery.com/qunit/qunit-1.12.0.js"></script>
+</head>
+<body>
+<div id="qunit"></div>
+<div id="qunit-fixture"></div>
+<script>
+test( "JSON 序列化测试", 13, function() {
+	var j = window.JSON, undefined;
+	ok( !!j, "JSON对象是否存在" );
+	ok( j.stringify(2) == "2", "数字序列化" );
+	ok( j.stringify("abc") == "\"abc\"", "字符串序列化" );
+	ok( j.stringify(true) == "true", "布尔型序列化" );
+	ok( j.stringify(false) == "false", "布尔型序列化" );
+	ok( j.stringify(undefined) == undefined, "未定义数据序列化" );
+	ok( j.stringify(null) == "null", "null序列化" );
+	ok( j.stringify([1,"2"]) == "[1,\"2\"]", "数组序列化" );
+	var testDate = function(){
+		 var test = j.stringify(new Date("2013/12/09 16:39:15")).replace(/\.000Z\"$/, "\""), ret = "\"2013\-12\-09T08:39:15\"";
+		 //原生JSON会返回毫秒数据，此处忽略
+		 return test == ret;
+	};
+	ok( testDate(), "日期序列化" );
+	ok( j.stringify({name:"zjcn5205"}) == "{\"name\":\"zjcn5205\"}", "对象序列化" );
+	ok( j.stringify({name:"machao",id:1,arr:[1,"2",{test:true}]}) == "{\"name\":\"machao\",\"id\":1,\"arr\":[1,\"2\",{\"test\":true}]}", "嵌套对象序列化" );
+	ok( j.stringify(testDate) == undefined, "function序列化" );
+	ok( j.stringify("\r\n\b\t\f\"\\") == "\"\\r\\n\\b\\t\\f\\\"\\\\\"", "特殊字符序列化" );
+});
+
+test( "JSON 格式化测试", 10, function() {
+	var j = window.JSON, undefined;
+	ok( j.parse("2") == 2, "数字格式化" );
+	ok( j.parse("\"abc\"") == "abc", "字符串格式化" );
+	ok( j.parse("true") === true, "布尔型格式化" );
+	ok( j.parse("false") === false, "布尔型格式化" );
+	ok( j.parse("null") === null, "null格式化" );
+	var testArr = function(){
+		var d = j.parse("[1,\"2\"]");
+		return ( d[0] == 1 && d[1] == "2" );
+	};
+	ok( testArr(), "数组格式化" );
+	var testDate = function(){
+		 var test = new Date("2013\-12\-09T08:39:15"), ret = new Date("2013/12/09 16:39:15");
+		 return test - ret == 0;
+	};
+	ok( testDate(), "日期格式化" );
+	var testObj = function(){
+		var d = j.parse("{\"name\":\"zjcn5205\"}");
+		return ( d.name == "zjcn5205" );
+	};
+	ok( testObj(), "对象格式化" );
+	var testObj2 = function(){
+		var d = j.parse("{\"name\":\"machao\",\"id\":1,\"arr\":[1,\"2\",{\"test\":true}]}");
+		return (d.name == "machao" && d.id == 1 && d.arr[0] == 1 && d.arr[1] == "2" && d.arr[2].test == true);
+	};
+	ok( testObj2(), "嵌套对象格式化" );
+	ok( j.parse("\"\\r\\n\\b\\t\\f\\\"\\\\\"") == "\r\n\b\t\f\"\\", "特殊字符格式化" );
+});
+</script>
+</body>
+</html>
