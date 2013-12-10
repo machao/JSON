@@ -22,9 +22,9 @@ test( "JSON 序列化测试", 13, function() {
 	ok( j.stringify(null) == "null", "null序列化" );
 	ok( j.stringify([1,"2"]) == "[1,\"2\"]", "数组序列化" );
 	var testDate = function(){
-		 var test = j.stringify(new Date("2013/12/09 16:39:15")).replace(/(\.000)?Z\"$/, "\""), ret = "\"2013\-12\-09T08:39:15\"";
+		 var test = j.stringify(new Date("2013/12/09 16:39:15")).replace(/(\.000)?Z\"$/, "\""), ret = '"2013-12-09T08:39:15"', ret2 = '"2013/12/09 16:39:15"';
 		 //原生JSON会返回毫秒数据，此处忽略
-		 return test == ret;
+		 return test === ret || test === ret2;
 	};
 	ok( testDate(), "日期序列化" );
 	ok( j.stringify({name:"zjcn5205"}) == "{\"name\":\"zjcn5205\"}", "对象序列化" );
@@ -46,7 +46,7 @@ test( "JSON 格式化测试", 10, function() {
 	};
 	ok( testArr(), "数组格式化" );
 	var testDate = function(){
-		 var test = new Date("2013-12-09T08:39:15Z"), ret = new Date("2013/12/09 16:39:15");
+		 var ret = new Date("2013/12/09 16:39:15"), str = j.stringify(ret), test = new Date( j.parse(str) );
 		 return test - ret == 0;
 	};
 	ok( testDate(), "日期格式化" );

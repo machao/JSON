@@ -18,6 +18,14 @@
 /*
  * 如果有系统默认的JSON对象，则不替换
  */
+//2013-12-10 马超 增加对IE低版本原生JSON存在的日期格式化bug进行调整和修复
+//在IE678下通过JSON.stringify序列化出来的日期格式字符串，不能通过new Date()恢复
+if( isNaN(new Date("2013-12-09T08:39:15")) ){
+	Date.prototype.toJSON = function(){
+		var pad = function(a){ return ("0"+a).slice(-2) };
+		return this.getFullYear() + '/'+ pad(this.getMonth()+ 1) +"/"+ pad(this.getDate()) +" "+ pad(this.getHours()) +":"+ pad(this.getMinutes()) +":"+ pad(this.getSeconds());
+	};
+}
 if( window.JSON )
 	return;
 /*
@@ -82,6 +90,7 @@ pad = function(source) {
 },
 /* 日期序列化 */
 encodeDate = function(source){
+	if( source.toJSON ) return '"'+source.toJSON()+'"';
 	return '"' + source.getUTCFullYear() + "-" 
 			+ pad(source.getUTCMonth() + 1) + "-" 
 			+ pad(source.getUTCDate()) + "T" 
