@@ -19,5 +19,5 @@ JSON
 
  **补充说明**
 
-增加的 window.JSON 的两个接口仅仅支持一个参数，虽不是完整的接口实现，但已经可以满足日常开发需要。如果想使用更完备的模拟组件，请移步：[https://github.com/machao/JSON-js](https://github.com/machao/JSON-js "https://github.com/machao/JSON-js")
+增加的 window.JSON 的两个接口仅仅支持一个参数，虽不是完整的接口实现，但已经可以满足日常开发需要。如果想使用更完备的模拟组件，请移步：[https://github.com/douglascrockford/JSON-js](https://github.com/douglascrockford/JSON-js)
 

@@ -114,8 +114,10 @@ encodeObj = function( value ){
 /* 序列化接口函数 */
 encode = function (value) {
 	switch (typeof value) {
+		case 'unknown':
+		case 'function':
 		case 'undefined':
-			return 'undefined';
+			return;
 		case 'number':
 			return isFinite(value) ? String(value) : "null";
 		case 'string':
